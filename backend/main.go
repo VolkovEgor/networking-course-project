@@ -1,6 +1,6 @@
 package main
 
-import "yak/backend/cmd/yak"
+import "github.com/architectv/networking-course-project/backend/cmd/yak"
 
 func main() {
 	yak.CreateApp()
