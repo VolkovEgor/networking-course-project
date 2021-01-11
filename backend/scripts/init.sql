@@ -316,7 +316,7 @@ INSERT INTO boards (
         datetimes_id,
         title
     )
-VALUES (1, 3, 14, 12, 'First board in the second project');
+VALUES (3, 3, 14, 12, 'First board in the second project');
 -- 3
 INSERT INTO board_users (user_id, board_id, permissions_id)
 VALUES (3, 3, 13);

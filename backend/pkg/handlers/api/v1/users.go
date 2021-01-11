@@ -2,9 +2,9 @@ package v1
 
 import (
 	"errors"
+	"github.com/architectv/networking-course-project/backend/pkg/models"
 	"strconv"
 	"strings"
-	"yak/backend/pkg/models"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/gofiber/fiber/v2"

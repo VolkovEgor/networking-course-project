@@ -1,8 +1,8 @@
 package api
 
 import (
-	v1 "yak/backend/pkg/handlers/api/v1"
-	"yak/backend/pkg/services"
+	v1 "github.com/architectv/networking-course-project/backend/pkg/handlers/api/v1"
+	"github.com/architectv/networking-course-project/backend/pkg/services"
 
 	"github.com/gofiber/fiber/v2"
 )

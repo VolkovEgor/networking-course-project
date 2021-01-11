@@ -2,12 +2,12 @@ package v1
 
 import (
 	"bytes"
+	"github.com/architectv/networking-course-project/backend/pkg/models"
+	"github.com/architectv/networking-course-project/backend/pkg/services"
+	mock_services "github.com/architectv/networking-course-project/backend/pkg/services/mocks"
 	"io/ioutil"
 	"net/http/httptest"
 	"testing"
-	"yak/backend/pkg/models"
-	"yak/backend/pkg/services"
-	mock_services "yak/backend/pkg/services/mocks"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang/mock/gomock"

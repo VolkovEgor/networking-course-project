@@ -2,8 +2,8 @@ package postgres
 
 import (
 	"errors"
+	"github.com/architectv/networking-course-project/backend/pkg/models"
 	"testing"
-	"yak/backend/pkg/models"
 
 	"github.com/stretchr/testify/assert"
 	sqlmock "github.com/zhashkevych/go-sqlxmock"

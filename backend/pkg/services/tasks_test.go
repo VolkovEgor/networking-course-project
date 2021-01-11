@@ -2,11 +2,11 @@ package services
 
 import (
 	"errors"
+	"github.com/architectv/networking-course-project/backend/pkg/builders"
+	"github.com/architectv/networking-course-project/backend/pkg/models"
 	"testing"
-	"yak/backend/pkg/builders"
-	"yak/backend/pkg/models"
 
-	mock_repositories "yak/backend/pkg/repositories/mocks"
+	mock_repositories "github.com/architectv/networking-course-project/backend/pkg/repositories/mocks"
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"

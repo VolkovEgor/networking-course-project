@@ -1,10 +1,10 @@
 package yak
 
 import (
-	"yak/backend/pkg/handlers"
-	"yak/backend/pkg/repositories"
-	"yak/backend/pkg/repositories/postgres"
-	"yak/backend/pkg/services"
+	"github.com/architectv/networking-course-project/backend/pkg/handlers"
+	"github.com/architectv/networking-course-project/backend/pkg/repositories"
+	"github.com/architectv/networking-course-project/backend/pkg/repositories/postgres"
+	"github.com/architectv/networking-course-project/backend/pkg/services"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"

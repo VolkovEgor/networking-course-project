@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"github.com/architectv/networking-course-project/backend/pkg/models"
 	"strings"
-	"yak/backend/pkg/models"
 
 	"github.com/jmoiron/sqlx"
 )

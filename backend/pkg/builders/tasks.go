@@ -1,7 +1,7 @@
 package builders
 
 import (
-	"yak/backend/pkg/models"
+	"github.com/architectv/networking-course-project/backend/pkg/models"
 )
 
 type TaskBuilder struct {

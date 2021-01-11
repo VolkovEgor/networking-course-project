@@ -2,9 +2,9 @@ package postgres
 
 import (
 	"fmt"
+	"github.com/architectv/networking-course-project/backend/pkg/models"
 	"strings"
 	"time"
-	"yak/backend/pkg/models"
 
 	"github.com/jmoiron/sqlx"
 )

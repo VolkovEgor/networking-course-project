@@ -4,9 +4,9 @@ import (
 	"crypto/sha1"
 	"errors"
 	"fmt"
+	"github.com/architectv/networking-course-project/backend/pkg/models"
+	"github.com/architectv/networking-course-project/backend/pkg/repositories"
 	"time"
-	"yak/backend/pkg/models"
-	"yak/backend/pkg/repositories"
 
 	"github.com/dgrijalva/jwt-go"
 )

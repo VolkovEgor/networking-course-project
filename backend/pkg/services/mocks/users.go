@@ -5,8 +5,8 @@
 package mock_services
 
 import (
+	models "github.com/architectv/networking-course-project/backend/pkg/models"
 	reflect "reflect"
-	models "yak/backend/pkg/models"
 
 	gomock "github.com/golang/mock/gomock"
 )

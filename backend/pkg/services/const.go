@@ -1,5 +1,12 @@
 package services
 
+import (
+	"fmt"
+
+	"github.com/go-testfixtures/testfixtures/v3"
+	"github.com/jmoiron/sqlx"
+)
+
 type Map map[string]interface{}
 
 const (
@@ -73,3 +80,38 @@ const (
 
 	DbResultNotFound = "sql: no rows in result set"
 )
+
+// tests
+const (
+	UsernameTestDB = "postgres"
+	PasswordTestDB = "123matan123"
+	HostTestDB     = "localhost"
+	PortTestDB     = "5432"
+	DBnameTestDB   = "yak_test_real_db"
+	SslmodeTestDB  = "disable"
+)
+
+func openTestDatabase() (*sqlx.DB, error) {
+	db, err := sqlx.Open("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
+		HostTestDB, PortTestDB, UsernameTestDB, DBnameTestDB, PasswordTestDB, SslmodeTestDB))
+	return db, err
+}
+
+func prepareTestDatabase() (*sqlx.DB, error) {
+	db, err := openTestDatabase()
+	if err != nil {
+		return nil, err
+	}
+
+	fixtures, err := testfixtures.New(
+		testfixtures.Database(db.DB),
+		testfixtures.Dialect("postgres"),
+		testfixtures.Directory("fixtures"),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	err = fixtures.Load()
+	return db, err
+}

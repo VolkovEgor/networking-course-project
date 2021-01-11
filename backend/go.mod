@@ -4,10 +4,12 @@ go 1.15
 
 require (
 	github.com/Djarvur/go-err113 v0.1.0 // indirect
+	github.com/architectv/networking-course-project/backend v0.0.0-20210110191932-a66885acbd16
 	github.com/asaskevich/govalidator v0.0.0-20200907205600-7a23bdc65eef
 	github.com/daixiang0/gci v0.2.5 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.6.3
+	github.com/go-testfixtures/testfixtures/v3 v3.4.1
 	github.com/gofiber/fiber/v2 v2.1.2
 	github.com/golang-migrate/migrate v3.5.4+incompatible
 	github.com/golang/mock v1.4.4

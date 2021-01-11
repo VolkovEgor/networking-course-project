@@ -3,8 +3,8 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
+	"github.com/architectv/networking-course-project/backend/pkg/models"
 	"strings"
-	"yak/backend/pkg/models"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"

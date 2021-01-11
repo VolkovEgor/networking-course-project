@@ -1,8 +1,8 @@
 package v1
 
 import (
+	"github.com/architectv/networking-course-project/backend/pkg/models"
 	"strconv"
-	"yak/backend/pkg/models"
 
 	"github.com/gofiber/fiber/v2"
 )

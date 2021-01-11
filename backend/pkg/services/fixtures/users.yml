@@ -1,0 +1,12 @@
+# comments.yml
+- id: 1
+  nickname: test
+  email: test@.mail.ru
+  password: qwerty
+  avatar:  photo1
+
+- id: 2
+  nickname: alex
+  email: alex@.mail.ru
+  password: "123321"
+  avatar: photo2

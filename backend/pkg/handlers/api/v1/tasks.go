@@ -2,8 +2,8 @@ package v1
 
 import (
 	"fmt"
+	"github.com/architectv/networking-course-project/backend/pkg/models"
 	"strconv"
-	"yak/backend/pkg/models"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/gofiber/fiber/v2"
