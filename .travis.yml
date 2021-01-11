@@ -17,4 +17,4 @@ jobs:
         - cd backend
         - go test -short ./... # unit tests
         - go test -tags=integration ./... # integration tests
-        # - go test -tags=e2e # e2e tests
+        - go test -tags=e2e # e2e tests
