@@ -252,6 +252,28 @@ func Test_E2E_App(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, expectedBody, string(body))
 
+	// Update board
+	expectedStatus = fiber.StatusOK
+	inputBoardTitle = "New Title"
+	inputDefPerms = fmt.Sprintf(`{"read":%s,"write":%s,"admin":%s}`, inputRead, inputWrite, inputAdmin)
+	expectedBody = fmt.Sprintf(`{"code":200,"message":"OK","data":{}}`)
+	inputBody = fmt.Sprintf(`{"title":"%s","defaultPermissions":%s}`, inputTitle, inputDefPerms)
+
+	req = httptest.NewRequest(
+		"PUT",
+		"/api/v1/projects/"+expectedProjectId+"/boards/"+expectedBoardId,
+		bytes.NewBufferString(inputBody),
+	)
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-type", "application/json")
+
+	resp, err = app.Test(req, -1)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedStatus, resp.StatusCode)
+	body, err = ioutil.ReadAll(resp.Body)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedBody, string(body))
+
 	// Get board
 	expectedStatus = fiber.StatusOK
 
