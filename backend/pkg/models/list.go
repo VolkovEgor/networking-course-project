@@ -8,6 +8,6 @@ type TaskList struct {
 }
 
 type UpdateTaskList struct {
-	Title    *string `json:"title"`
+	Title    *string `json:"title" valid:"length(1|32)"`
 	Position *int    `json:"position" valid:"type(*int)"`
 }

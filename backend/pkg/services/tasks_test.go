@@ -162,6 +162,7 @@ func TestTaskService_Delete(t *testing.T) {
 				userId:    1,
 				projectId: 1,
 				boardId:   1,
+				listId:    1,
 				taskId:    1,
 			},
 			projectMock: func(r *mock_repositories.MockProject, userId, projectId int) {
