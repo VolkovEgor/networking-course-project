@@ -598,7 +598,7 @@ func Test_E2E_N(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping e2e test")
 	}
-	const N = 10
+	const N = 100
 	Passed = 0
 	oldPassed := Passed
 	LogDisable = true
