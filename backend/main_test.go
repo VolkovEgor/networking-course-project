@@ -48,6 +48,14 @@ func prepareTestDatabase() (*sqlx.DB, error) {
 	return db, err
 }
 
+func s_to_b(s string) bool {
+	if s == "true" {
+		return true
+	} else {
+		return false
+	}
+}
+
 var Passed = 0
 var LogDisable = false
 
@@ -229,6 +237,54 @@ func Test_E2E_App(t *testing.T) {
 
 	assert.Equal(t, inputTitle, project.Title)
 	assert.Equal(t, inputDescription, project.Description)
+	assert.Equal(t, s_to_b(inputRead), project.DefaultPermissions.Read)
+	assert.Equal(t, s_to_b(inputWrite), project.DefaultPermissions.Write)
+	assert.Equal(t, s_to_b(inputAdmin), project.DefaultPermissions.Admin)
+
+	// Create project member
+	expectedStatus = fiber.StatusOK
+	expectedProjectUsersId := "8"
+	memberNickname := "alex"
+	inputRead = "true"
+	inputWrite = "true"
+	inputAdmin = "false"
+	expectedBody = fmt.Sprintf(`{"code":200,"message":"OK","data":{"Project permissions id":%s}}`, expectedProjectUsersId)
+	inputBody = fmt.Sprintf(`{"read":%s,"write":%s,"admin":%s}`, inputRead, inputWrite, inputAdmin)
+
+	req = httptest.NewRequest(
+		"POST",
+		"/api/v1/projects/"+expectedProjectId+"/permissions/"+memberNickname,
+		bytes.NewBufferString(inputBody),
+	)
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-type", "application/json")
+
+	resp, err = app.Test(req, -1)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedStatus, resp.StatusCode)
+	body, err = ioutil.ReadAll(resp.Body)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedBody, string(body))
+
+	// Delete project member
+	expectedStatus = fiber.StatusOK
+	memberId := "1"
+	expectedBody = fmt.Sprintf(`{"code":200,"message":"OK","data":{}}`)
+
+	req = httptest.NewRequest(
+		"DELETE",
+		"/api/v1/projects/"+expectedProjectId+"/permissions/"+memberId,
+		bytes.NewBufferString(inputBody),
+	)
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-type", "application/json")
+
+	resp, err = app.Test(req, -1)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedStatus, resp.StatusCode)
+	body, err = ioutil.ReadAll(resp.Body)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedBody, string(body))
 
 	// Create board
 	expectedStatus = fiber.StatusOK
@@ -255,6 +311,9 @@ func Test_E2E_App(t *testing.T) {
 	// Update board
 	expectedStatus = fiber.StatusOK
 	inputBoardTitle = "New Title"
+	inputRead = "true"
+	inputWrite = "false"
+	inputAdmin = "false"
 	inputDefPerms = fmt.Sprintf(`{"read":%s,"write":%s,"admin":%s}`, inputRead, inputWrite, inputAdmin)
 	expectedBody = fmt.Sprintf(`{"code":200,"message":"OK","data":{}}`)
 	inputBody = fmt.Sprintf(`{"title":"%s","defaultPermissions":%s}`, inputTitle, inputDefPerms)
@@ -307,12 +366,15 @@ func Test_E2E_App(t *testing.T) {
 	pid, err := strconv.Atoi(expectedProjectId)
 	assert.Nil(t, err)
 	assert.Equal(t, pid, board.ProjectId)
+	assert.Equal(t, s_to_b(inputRead), project.DefaultPermissions.Read)
+	assert.Equal(t, s_to_b(inputWrite), project.DefaultPermissions.Write)
+	assert.Equal(t, s_to_b(inputAdmin), project.DefaultPermissions.Admin)
 
 	// Create list
 	expectedStatus = fiber.StatusOK
 	expectedListId := "4"
 	expectedBody = fmt.Sprintf(`{"code":200,"message":"OK","data":{"listId":%s}}`, expectedListId)
-	inputListTitle := "todo list"
+	inputListTitle := "Test list"
 	inputBody = fmt.Sprintf(`{"title":"%s"}`, inputListTitle)
 
 	req = httptest.NewRequest(
@@ -505,6 +567,29 @@ func Test_E2E_App(t *testing.T) {
 		assert.Equal(t, inputTaskTitle[i], item.Title)
 		assert.Equal(t, inputTaskDescription[i], item.Description)
 	}
+
+	// // Create label
+	// expectedStatus = fiber.StatusOK
+	// expectedLabelId := "4"
+	// expectedBody = fmt.Sprintf(`{"code":200,"message":"OK","data":{"taskId":%s}}`, expectedLabelId)
+	// inputLabelName := "Test label"
+	// inputLabelColor := "1"
+	// inputBody = fmt.Sprintf(`{"name":"%s", "color":"%s"}`, inputLabelName, inputLabelColor)
+
+	// req = httptest.NewRequest(
+	// 	"POST",
+	// 	"/api/v1/projects/"+expectedProjectId+"/boards/"+expectedBoardId+"/lists/"+expectedListId+
+	// 		"/tasks/"+expectedTaskId1+"/labels",
+	// 	bytes.NewBufferString(inputBody),
+	// )
+	// req.Header.Set("Authorization", "Bearer "+token)
+	// req.Header.Set("Content-type", "application/json")
+
+	// resp, err = app.Test(req, -1)
+	// assert.Nil(t, err)
+	// assert.Equal(t, expectedStatus, resp.StatusCode)
+	// body, err = ioutil.ReadAll(resp.Body)
+	// assert.Nil(t, err)
 
 	Passed++
 }
