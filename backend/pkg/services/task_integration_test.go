@@ -27,11 +27,6 @@ func Test_Integration_TaskService_Create(t *testing.T) {
 	}
 	defer db.Close()
 
-	rt := postgres.NewTaskPg(db)
-	rb := postgres.NewBoardPg(db)
-	rp := postgres.NewProjectPg(db)
-	s := NewTaskService(rt, rb, rp)
-
 	tests := []struct {
 		name                string
 		input               args
@@ -94,6 +89,11 @@ func Test_Integration_TaskService_Create(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
+			rt := postgres.NewTaskPg(db)
+			rb := postgres.NewBoardPg(db)
+			rp := postgres.NewProjectPg(db)
+			s := NewTaskService(rt, rb, rp)
+
 			got := s.Create(test.input.userId, test.input.projectId, test.input.boardId,
 				test.input.listId, test.input.task)
 			assert.Equal(t, test.expectedApiResponse.Code, got.Code)

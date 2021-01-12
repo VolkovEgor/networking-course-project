@@ -27,6 +27,7 @@ require (
 	github.com/matoous/godox v0.0.0-20200801072554-4fb83dc2941e // indirect
 	github.com/mitchellh/mapstructure v1.3.3 // indirect
 	github.com/pelletier/go-toml v1.8.1 // indirect
+	github.com/pkg/profile v1.5.0 // indirect
 	github.com/polyfloyd/go-errorlint v0.0.0-20201102195345-32ea8681d64b // indirect
 	github.com/quasilyte/go-ruleguard v0.2.1 // indirect
 	github.com/quasilyte/regex/syntax v0.0.0-20200805063351-8f842688393c // indirect

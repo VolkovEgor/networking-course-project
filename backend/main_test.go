@@ -568,28 +568,156 @@ func Test_E2E_App(t *testing.T) {
 		assert.Equal(t, inputTaskDescription[i], item.Description)
 	}
 
-	// // Create label
-	// expectedStatus = fiber.StatusOK
-	// expectedLabelId := "4"
-	// expectedBody = fmt.Sprintf(`{"code":200,"message":"OK","data":{"taskId":%s}}`, expectedLabelId)
-	// inputLabelName := "Test label"
-	// inputLabelColor := "1"
-	// inputBody = fmt.Sprintf(`{"name":"%s", "color":"%s"}`, inputLabelName, inputLabelColor)
+	// Create label
+	expectedStatus = fiber.StatusOK
+	expectedLabelId := "1"
+	expectedBody = fmt.Sprintf(`{"code":200,"message":"OK","data":{"labelId":%s}}`, expectedLabelId)
+	inputLabelName := "Test label"
+	inputLabelColor := "1"
+	inputBody = fmt.Sprintf(`{"name":"%s", "color":%s}`, inputLabelName, inputLabelColor)
 
-	// req = httptest.NewRequest(
-	// 	"POST",
-	// 	"/api/v1/projects/"+expectedProjectId+"/boards/"+expectedBoardId+"/lists/"+expectedListId+
-	// 		"/tasks/"+expectedTaskId1+"/labels",
-	// 	bytes.NewBufferString(inputBody),
-	// )
-	// req.Header.Set("Authorization", "Bearer "+token)
-	// req.Header.Set("Content-type", "application/json")
+	req = httptest.NewRequest(
+		"POST",
+		"/api/v1/projects/"+expectedProjectId+"/boards/"+expectedBoardId+"/labels",
+		bytes.NewBufferString(inputBody),
+	)
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-type", "application/json")
 
-	// resp, err = app.Test(req, -1)
-	// assert.Nil(t, err)
-	// assert.Equal(t, expectedStatus, resp.StatusCode)
-	// body, err = ioutil.ReadAll(resp.Body)
-	// assert.Nil(t, err)
+	resp, err = app.Test(req, -1)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedStatus, resp.StatusCode)
+	body, err = ioutil.ReadAll(resp.Body)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedBody, string(body))
+
+	// Create label in task
+	expectedStatus = fiber.StatusOK
+	expectedTaskLabelId := "1"
+	expectedBody = fmt.Sprintf(`{"code":200,"message":"OK","data":{"taskLabelId":%s}}`, expectedTaskLabelId)
+
+	req = httptest.NewRequest(
+		"POST",
+		"/api/v1/projects/"+expectedProjectId+"/boards/"+expectedBoardId+"/lists/"+expectedListId+"/tasks/"+
+			expectedTaskId1+"/labels/"+expectedLabelId,
+		nil,
+	)
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-type", "application/json")
+
+	resp, err = app.Test(req, -1)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedStatus, resp.StatusCode)
+	body, err = ioutil.ReadAll(resp.Body)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedBody, string(body))
+
+	// Update label
+	expectedStatus = fiber.StatusOK
+	inputLabelName = "New label name"
+	inputLabelColor = "2"
+	expectedBody = fmt.Sprintf(`{"code":200,"message":"OK","data":{}}`)
+	inputBody = fmt.Sprintf(`{"name":"%s","color":%s}`, inputLabelName, inputLabelColor)
+
+	req = httptest.NewRequest(
+		"PUT",
+		"/api/v1/projects/"+expectedProjectId+"/boards/"+expectedBoardId+"/labels/"+expectedLabelId,
+		bytes.NewBufferString(inputBody),
+	)
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-type", "application/json")
+
+	resp, err = app.Test(req, -1)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedStatus, resp.StatusCode)
+	body, err = ioutil.ReadAll(resp.Body)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedBody, string(body))
+
+	// Get label in task
+	expectedStatus = fiber.StatusOK
+
+	req = httptest.NewRequest(
+		"GET",
+		"/api/v1/projects/"+expectedProjectId+"/boards/"+expectedBoardId+"/lists/"+expectedListId+"/tasks/"+
+			expectedTaskId1+"/labels/",
+		nil,
+	)
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-type", "application/json")
+
+	resp, err = app.Test(req, -1)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedStatus, resp.StatusCode)
+	body, err = ioutil.ReadAll(resp.Body)
+	assert.Nil(t, err)
+	apiResp = &models.ApiResponse{}
+	err = json.Unmarshal(body, apiResp)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedStatus, apiResp.Code)
+	labelsInterface := apiResp.Data.(map[string]interface{})["labels"].([]interface{})
+	var labelsSlice []map[string]interface{}
+	for _, item := range labelsInterface {
+		labelsSlice = append(labelsSlice, item.(map[string]interface{}))
+	}
+	assert.Equal(t, 1, len(labelsSlice))
+	var labels []*models.Label
+	for _, item := range labelsSlice {
+		labelJSON, err := json.Marshal(item)
+		assert.Nil(t, err)
+		label := &models.Label{}
+		err = json.Unmarshal(labelJSON, label)
+		assert.Nil(t, err)
+		labels = append(labels, label)
+	}
+	bid, err := strconv.Atoi(expectedBoardId)
+	assert.Nil(t, err)
+	inputLabelNames := []string{inputLabelName}
+	inputLabelColors := []string{inputLabelColor}
+	for i, item := range labels {
+		assert.Equal(t, bid, item.BoardId)
+		assert.Equal(t, inputLabelNames[i], item.Name)
+		assert.Equal(t, inputLabelColors[i], strconv.Itoa(int(item.Color)))
+	}
+
+	// Delete label in task
+	expectedStatus = fiber.StatusOK
+	expectedBody = fmt.Sprintf(`{"code":200,"message":"OK","data":{}}`)
+
+	req = httptest.NewRequest(
+		"DELETE",
+		"/api/v1/projects/"+expectedProjectId+"/boards/"+expectedBoardId+"/lists/"+expectedListId+
+			"/tasks/"+expectedTaskId1+"/labels/"+expectedLabelId,
+		nil,
+	)
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-type", "application/json")
+
+	resp, err = app.Test(req, -1)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedStatus, resp.StatusCode)
+	body, err = ioutil.ReadAll(resp.Body)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedBody, string(body))
+
+	// Delete label in board
+	expectedStatus = fiber.StatusOK
+	expectedBody = fmt.Sprintf(`{"code":200,"message":"OK","data":{}}`)
+
+	req = httptest.NewRequest(
+		"DELETE",
+		"/api/v1/projects/"+expectedProjectId+"/boards/"+expectedBoardId+"/labels/"+expectedLabelId,
+		nil,
+	)
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-type", "application/json")
+
+	resp, err = app.Test(req, -1)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedStatus, resp.StatusCode)
+	body, err = ioutil.ReadAll(resp.Body)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedBody, string(body))
 
 	Passed++
 }
