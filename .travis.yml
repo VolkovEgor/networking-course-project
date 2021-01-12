@@ -18,3 +18,4 @@ jobs:
         - go test -short ./... # unit tests
         - go test -tags=integration ./... # integration tests
         - go test -tags=e2e # e2e tests
+        - go test -tags=bdd_e2e # BDD e2e tests

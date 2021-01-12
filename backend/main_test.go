@@ -245,9 +245,6 @@ func Test_E2E_App(t *testing.T) {
 	expectedStatus = fiber.StatusOK
 	expectedProjectUsersId := "8"
 	memberNickname := "alex"
-	inputRead = "true"
-	inputWrite = "true"
-	inputAdmin = "false"
 	expectedBody = fmt.Sprintf(`{"code":200,"message":"OK","data":{"Project permissions id":%s}}`, expectedProjectUsersId)
 	inputBody = fmt.Sprintf(`{"read":%s,"write":%s,"admin":%s}`, inputRead, inputWrite, inputAdmin)
 
@@ -634,7 +631,7 @@ func Test_E2E_App(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, expectedBody, string(body))
 
-	// Get label in task
+	// Get labels in task
 	expectedStatus = fiber.StatusOK
 
 	req = httptest.NewRequest(
